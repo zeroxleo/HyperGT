@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch_sparse import SparseTensor, matmul
 from torch_geometric.utils import degree
-from func_class import SparseLinear
+from utils import SparseLinear
 
 BIG_CONSTANT = 1e8
 
