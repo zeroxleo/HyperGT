@@ -56,7 +56,7 @@ def parser_add_main_args(parser):
     parser.add_argument('--num_layers', type=int, default=2,
                         help='number of layers for deep methods')
 
-    # hyper-parameter for nodeformer
+    # hyper-parameter for hypergt
     parser.add_argument('--num_heads', type=int, default=4)
     parser.add_argument('--M', type=int,
                         default=30, help='number of random features')
@@ -72,29 +72,6 @@ def parser_add_main_args(parser):
     parser.add_argument('--rb_trans', type=str, default='sigmoid', choices=['sigmoid', 'identity'],
                         help='non-linearity for relational bias')
     parser.add_argument('--batch_size', type=int, default=10000)
-
-    # hyper-parameter for gnn baseline
-    parser.add_argument('--hops', type=int, default=1,
-                        help='power of adjacency matrix for certain methods')
-    parser.add_argument('--cached', action='store_true',
-                        help='set to use faster sgc')
-    parser.add_argument('--gat_heads', type=int, default=8,
-                        help='attention heads for gat')
-    parser.add_argument('--out_heads', type=int, default=1,
-                        help='out heads for gat')
-    parser.add_argument('--projection_matrix_type', type=bool, default=True,
-                        help='use projection matrix or not')
-    parser.add_argument('--lp_alpha', type=float, default=.1,
-                        help='alpha for label prop')
-    parser.add_argument('--gpr_alpha', type=float, default=.1,
-                        help='alpha for gprgnn')
-    parser.add_argument('--directed', action='store_true',
-                        help='set to not symmetrize adjacency')
-    parser.add_argument('--jk_type', type=str, default='max', choices=['max', 'lstm', 'cat'],
-                        help='jumping knowledge type')
-    parser.add_argument('--num_mlp_layers', type=int, default=1,
-                        help='number of mlp layers in h2gcn')
-
 
 
 
