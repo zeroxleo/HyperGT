@@ -1,25 +1,31 @@
 # Hypergraph Transformer for Semi-Supervised Classification
 
-This is the repo for our ICASSP 2024 paper: [Hypergraph Transformer for Semi-Supervised Classification](https://arxiv.org/pdf/2312.11385.pdf).
+The official implementation for "Hypergraph Transformer for Semi-Supervised Classification" which is accepted to ICASSP 2024 as a lecture presentation. [[paper]](https://arxiv.org/pdf/2312.11385.pdf) [[slides]](https://drive.google.com/file/d/1NTQYmLrxRng0Xk0tiqJMephz4Bavvq3w/view?usp=sharing)
+
+
 
 ## Recommend Environment:
 ```
 conda create -n "hyperht" python=3.9
 conda activate hypergt
-pip install -r requirements.txt
+bash install.sh
 ```
 
 ## Data Preparation:
-Create a folder `../data/pyg_data/hypergraph_dataset_updated` and download the datasets from [here]()
+Create a folder `../data/raw_data` and download the raw datasets from [here](https://huggingface.co/datasets/peihaowang/edgnn-hypergraph-dataset/tree/main).
 
-
-You can also set up the following three directories and then unzip the raw data zip file into `p2raw`:
+The directory structure should look like:
 ```
-p2root: './data/pyg_data/hypergraph_dataset_updated/'
-p2raw: './data/AllSet_all_raw_data/'
-p2dgl_data: './data/dgl_data_raw/'
+HyperGT/
+  <source code files>
+  ...
+  data
+    raw_data
+      congress-bills
+      senate-committees
+      walmart-trips
+      house-committees
 ```
- The raw data zip file can be found in this [link](https://github.com/jianhao2016/AllSet/tree/main/data/raw_data).
 
 ## Acknowledgement
 
