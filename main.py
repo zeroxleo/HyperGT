@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.utils import to_undirected, remove_self_loops
-from func_class import add_self_loops
+from utils import add_self_loops
 from tqdm import tqdm
 
 from logger import Logger
@@ -43,7 +43,7 @@ if len(dataset.label.shape) == 1:
     dataset.label = dataset.label.unsqueeze(1)
 dataset.label = dataset.label.to(device)
 
-# get the splits for all runs
+### get the splits for all runs ###
 if args.rand_split:
     split_idx_lst = [dataset.get_idx_split(train_prop=args.train_prop, valid_prop=args.valid_prop)
                      for _ in range(args.runs)]
@@ -61,15 +61,11 @@ else:
 n = dataset.graph['num_binodes'] #number of tokens
 num_nodes = dataset.graph['num_nodes'] #number of nodes
 e = dataset.graph['H'].shape[1] #number of hyperedges
-c = max(dataset.label.max().item() + 1, dataset.label.shape[1])
-d = dataset.graph['node_feat'].shape[1]
+c = max(dataset.label.max().item() + 1, dataset.label.shape[1]) #number of class
+d = dataset.graph['node_feat'].shape[1] #number of features
 
 
 print(f"dataset {args.dataset} | num token {n} | num node {num_nodes} | num edge {e}| num node feats {d} | num classes {c}")
-
-# whether or not to symmetrize
-if not args.directed and args.dataset != 'ogbn-proteins':
-    dataset.graph['edge_index_bipart'] = to_undirected(dataset.graph['edge_index_bipart'])
 
 dataset.graph['node_feat'] = dataset.graph['node_feat'].to(device)
 dataset.graph['edge_index_bipart']= dataset.graph['edge_index_bipart'].to(device)
