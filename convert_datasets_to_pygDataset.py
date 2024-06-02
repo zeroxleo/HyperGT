@@ -1,12 +1,15 @@
 import torch
 import pickle
 import os
+# import ipdb
 
 import os.path as osp
+import sys
 
 from torch_geometric.data import Data
 from torch_geometric.data import InMemoryDataset
 
+from load_other_datasets import * 
 
 
 def save_data_to_pickle(data, p2root = '../data/', file_name = None):
@@ -29,7 +32,8 @@ def save_data_to_pickle(data, p2root = '../data/', file_name = None):
 
 
 class dataset_Hypergraph(InMemoryDataset):
-    def __init__(self, root = './data/pyg_data/hypergraph_dataset_updated/', name = None, 
+    def __init__(self, root = '../data/pyg_data/hypergraph_dataset_updated/', name = None, 
+                 p2raw = None,
                  train_percent = 0.01,
                  feature_noise = None,
                  transform=None, pre_transform=None):
@@ -41,7 +45,15 @@ class dataset_Hypergraph(InMemoryDataset):
             self.name = name
         
         self.feature_noise = feature_noise
+        
         self._train_percent = train_percent
+
+        if (p2raw is not None) and osp.isdir(p2raw):
+            self.p2raw = p2raw
+        elif p2raw is None:
+            self.p2raw = None
+        elif not osp.isdir(p2raw):
+            raise ValueError(f'path to raw hypergraph dataset "{p2raw}" does not exist!')
         
         if not osp.isdir(root):
             os.makedirs(root)
@@ -79,6 +91,32 @@ class dataset_Hypergraph(InMemoryDataset):
         return self.data.num_node_features
 
 
+    def download(self):
+        for name in self.raw_file_names:
+            p2f = osp.join(self.myraw_dir, name)
+            if not osp.isfile(p2f):
+                # file not exist, so we create it and save it there.
+                print("p2f:",p2f)
+                print("p2raw:",self.p2raw)
+                print("name:",self.name)
+
+                if self.feature_noise is None:
+                    raise ValueError(f'for cornell datasets, feature noise cannot be {self.feature_noise}')
+                feature_dim = int(self.name.split('-')[-1])#
+                tmp_name = '-'.join(self.name.split('-')[:-1])
+                tmp_data = load_cornell_dataset(path = self.p2raw,
+                    dataset = tmp_name,
+                    feature_dim = feature_dim,
+                    feature_noise = self.feature_noise,
+                    train_percent = self._train_percent)
+                    
+                _ = save_data_to_pickle(tmp_data, 
+                                          p2root = self.myraw_dir,
+                                          file_name = self.raw_file_names[0])
+            else:
+                # file exists already. Do nothing.
+                pass
+
     def process(self):
         p2f = osp.join(self.myraw_dir, self.raw_file_names[0])
         with open(p2f, 'rb') as f:
@@ -88,3 +126,40 @@ class dataset_Hypergraph(InMemoryDataset):
 
     def __repr__(self):
         return '{}()'.format(self.name)
+
+
+if __name__ == '__main__':
+
+    p2root = '../data/pyg_data/hypergraph_dataset_updated/'
+    p2raw = '../data/AllSet_all_raw_data/'
+    # dd = dataset_Hypergraph(root = p2root, name = 'walmart-trips-100', feature_noise = 0, 
+    #         p2raw = p2raw)
+
+    for f in ['walmart-trips-100', ]:# 'house-committees', 'amazon-reviews']:
+        for feature_noise in [0.1, 1]:
+            dd = dataset_Hypergraph(root = p2root, 
+                    name = f,
+                    feature_noise = feature_noise,
+                    p2raw = p2raw)
+
+            assert dd.data.num_nodes in dd.data.edge_index[0]
+            print(dd, dd.data)
+
+    
+    p2root = '../data/pyg_data/hypergraph_dataset_updated/'
+    p2raw = '../data/AllSet_all_raw_data/coauthorship/'
+    for f in ['coauthor_cora', ]: #'coauthor_dblp']:
+        dd = dataset_Hypergraph(root = p2root, 
+                name = f,
+                p2raw = p2raw)
+        assert dd.data.num_nodes in dd.data.edge_index[0]
+        print(dd, dd.data)
+
+    p2root = '../data/pyg_data/hypergraph_dataset_updated/'
+    p2raw = '../data/AllSet_all_raw_data/cocitation/'
+    for f in ['cora', 'citeseer']:
+        dd = dataset_Hypergraph(root = p2root, 
+                name = f,
+                p2raw = p2raw)
+        assert dd.data.num_nodes in dd.data.edge_index[0]
+        print(dd, dd.data)
