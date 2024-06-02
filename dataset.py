@@ -1,7 +1,7 @@
 import torch
 import os
 from data_utils import rand_train_test_idx, class_rand_splits
-from func_class import ExtractV2E, ConstructH
+from utils import ExtractV2E, ConstructH
 from convert_datasets_to_pygDataset import dataset_Hypergraph
 from tqdm import tqdm
 
@@ -78,7 +78,8 @@ def load_AllSet_dataset(args, feature_noise=None):
     name = args.dataset
     if name not in ['walmart-trips-100', 'house-committees-100','senate-committees-100','congress-bills-100']:
         feature_noise = None
-    dataset = dataset_Hypergraph(name=name,root = args.data_dir, feature_noise=feature_noise)
+    p2raw = 'data/raw_data/'
+    dataset = dataset_Hypergraph(name=name,root = args.data_dir, feature_noise=feature_noise,p2raw=p2raw)
     data = dataset.data
 
     if not hasattr(data, 'n_x'):
@@ -117,7 +118,7 @@ def load_AllSet_dataset(args, feature_noise=None):
     elif args.hefeat =='load':
         he_feat=torch.load('he_feat/he_feat_mean_'+name+'.pt')
     else:
-        raise NotImplementedError
+        raise ValueError('Invalid hyperedge feature type')
     
     node_feat = torch.cat([node_feat, he_feat], dim=0)
 
