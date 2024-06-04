@@ -1,6 +1,6 @@
 # Hypergraph Transformer for Semi-Supervised Classification
 
-The official implementation for "Hypergraph Transformer for Semi-Supervised Classification" which is accepted to ICASSP 2024 as a lecture presentation. [[paper]](https://arxiv.org/pdf/2312.11385.pdf) [[slides]](https://drive.google.com/file/d/1NTQYmLrxRng0Xk0tiqJMephz4Bavvq3w/view?usp=sharing)
+The official implementation for "Hypergraph Transformer for Semi-Supervised Classification" which is accepted to ICASSP 2024 as a lecture presentation. [[paper]](https://arxiv.org/abs/2312.11385v2) [[slides]](https://drive.google.com/file/d/1NTQYmLrxRng0Xk0tiqJMephz4Bavvq3w/view?usp=sharing)
 
 
 
