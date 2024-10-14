@@ -6,7 +6,7 @@ The official implementation for "Hypergraph Transformer for Semi-Supervised Clas
 
 ## Recommend Environment:
 ```
-conda create -n "hyperht" python=3.9
+conda create -n "hypergt" python=3.9
 conda activate hypergt
 bash install.sh
 ```
